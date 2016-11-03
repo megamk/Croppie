@@ -834,8 +834,17 @@
 
             zoomer.min = fix(minZoom, 4);
             zoomer.max = fix(maxZoom, 4);
-            var defaultInitialZoom = Math.max((boundaryData.width / imgData.width), (boundaryData.height / imgData.height));
-            initialZoom = self.data.boundZoom !== null ? self.data.boundZoom : defaultInitialZoom;
+
+            initialZoom = self.data.boundZoom;
+
+            if (initialZoom == null) {
+                var widthRatio = (boundaryData.width / imgData.width);
+                var heightRatio = (boundaryData.height / imgData.height);
+                initialZoom = Math.max(widthRatio, heightRatio);
+                if (self.options.detectFit) {
+                    initialZoom = (imgData.width > imgData.height) ? widthRatio : heightRatio;
+                }
+            }
             _setZoomerVal.call(self, initialZoom);
             dispatchChange(zoomer);
         }
